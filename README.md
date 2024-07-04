@@ -1,2 +1,2 @@
-# monkeyJ
-monkey language (in java)
+# monkey (with incremental compilation via salsa)
+monkey language 
