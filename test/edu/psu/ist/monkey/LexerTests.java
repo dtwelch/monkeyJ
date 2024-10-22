@@ -27,4 +27,24 @@ public final class LexerTests {
             Assertions.assertEquals(expectedToken, actualToken);
         }
     }
+
+    @Test public void testSimpleProg01() {
+        var input = """
+                let five = 5;
+                let ten = 10;
+                
+                let add = fn(x, y) {
+                    x + y;
+                }
+                
+                let result = add(five, ten);
+                """.trim();
+
+        Token[] expectedTokens = {
+                Token.Let.LetInst,
+                new Token.Int(5),
+
+        };
+
+    }
 }

@@ -10,7 +10,7 @@ public final class Lexer {
     private int position;
 
     /** Current reading position in input. */
-    private int readPosition; //
+    private int readPosition;
 
     /** Current char under examination. */
     private byte ch;
