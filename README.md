@@ -1,5 +1,5 @@
-# monkey (in jdk22)
-Implementing the interpreter from *"Writing an Interpreter in Go 1.7"* by Thorsten Ball 
+## monkeyJ
 
-Attempts to use some newish features of Java.
+An implementation of the "Monkey" interpreted language from:
 
+> Writing an Interpreter in Go (v1.7) - by Thorsten Ball
