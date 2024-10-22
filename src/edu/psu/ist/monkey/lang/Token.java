@@ -1,4 +1,4 @@
-package edu.psu.ist.monkey.token;
+package edu.psu.ist.monkey.lang;
 
 public sealed interface Token {
 
