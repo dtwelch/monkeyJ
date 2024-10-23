@@ -43,7 +43,7 @@ public final class Lexer {
             case '{' -> Token.LBrace.LBraceInst;
             case '}' -> Token.RBrace.RBraceInst;
             case 0 -> Token.Eof.EofInst;
-            default -> Token.Err.ErrorInst;
+            default -> Token.Illegal.IllegalInst;
         };
         readChar();
         return tok;

@@ -31,20 +31,20 @@ public final class LexerTests {
     @Test public void testSimpleProg01() {
         var input = """
                 let five = 5;
-                let ten = 10;
-                
-                let add = fn(x, y) {
-                    x + y;
-                }
-                
-                let result = add(five, ten);
                 """.trim();
 
         Token[] expectedTokens = {
                 Token.Let.LetInst,
+                new Token.Ident("five"),
+                Token.Assign.AssignInst,
                 new Token.Int(5),
-
+                Token.Semi.SemiInst,
+                Token.Eof.EofInst
         };
-
+        var l = new Lexer(input);
+        for (Token expectedToken : expectedTokens) {
+            var actualToken = l.nextToken();
+            Assertions.assertEquals(expectedToken, actualToken);
+        }
     }
 }

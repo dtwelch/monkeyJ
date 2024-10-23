@@ -24,13 +24,12 @@ public sealed interface Token {
             //
             case Fun _ -> "fun";
             case Let _ -> "let";
-            case Err _ -> "err";
         };
     }
 
     enum Illegal implements Token {IllegalInst}
     enum Eof implements Token {EofInst}
-    enum Err implements Token {ErrorInst}
+
     // identifiers + literals
     record Ident(String id) implements Token {}
     record Int(int i) implements Token {}
