@@ -1,6 +1,8 @@
 package edu.psu.ist.monkey.phase;
 
 import edu.psu.ist.monkey.lang.Token;
+import io.vavr.collection.List;
+import io.vavr.collection.Vector;
 
 public final class Lexer {
 
@@ -26,35 +28,46 @@ public final class Lexer {
         if (readPosition >= input.length()) {
             ch = 0;
         } else {
-            ch = input.getBytes()[readPosition];
+            ch = (byte) input.charAt(readPosition);
         }
         position = readPosition;
         readPosition = readPosition + 1;
     }
 
     public Token nextToken() {
-        var tok = switch (ch) {
-            case '=' -> Token.Assign.AssignInst;
-            case ';' -> Token.Semi.SemiInst;
-            case '(' -> Token.LParen.LParenInst;
-            case ')' -> Token.RParen.RParenInst;
-            case ',' -> Token.Comma.CommaInst;
-            case '+' -> Token.Plus.PlusInst;
-            case '{' -> Token.LBrace.LBraceInst;
-            case '}' -> Token.RBrace.RBraceInst;
-            case 0 -> Token.Eof.EofInst;
+        skipWhitespace();
+        //System.out.println("current char: " + (char) ch);
+        Token tok;
+        switch (ch) {
+            case '=' -> tok = Token.Assign.AssignInst;
+            case ';' -> tok = Token.Semi.SemiInst;
+            case '(' -> tok = Token.LParen.LParenInst;
+            case ')' -> tok = Token.RParen.RParenInst;
+            case ',' -> tok = Token.Comma.CommaInst;
+            case '+' -> tok = Token.Plus.PlusInst;
+            case '{' -> tok = Token.LBrace.LBraceInst;
+            case '}' -> tok = Token.RBrace.RBraceInst;
+            case 0 -> tok = Token.Eof.EofInst;
             default -> {
                 if (isLetter(ch)) {
                     var rawId = readIdentifier();
                     // returns a kw if rawId contains one
-                    yield Token.fromText(rawId);
+                    return Token.fromText(rawId);
+                } else if (isDigit(ch)) {
+                    return new Token.Num(readNumber());
                 } else {
-                    yield Token.Illegal.IllegalInst;
+                    return Token.Illegal.IllegalInst;
                 }
             }
-        };
+        }
         readChar();
         return tok;
+    }
+
+    private void skipWhitespace() {
+        while (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r') {
+            readChar();
+        }
     }
 
     private String readIdentifier() {
@@ -65,7 +78,17 @@ public final class Lexer {
         return input.substring(a, this.position);
     }
 
-    private boolean isLetter(byte ch) {
-        return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_';
+    private String readNumber() {
+        var a = this.position;
+        while (isDigit(ch)) {
+            readChar();
+        }
+        return input.substring(a, this.position);
     }
+
+    private boolean isLetter(byte b) {
+        return 'a' <= b && b <= 'z' || 'A' <= b && b <= 'Z' || b == '_';
+    }
+
+    private boolean isDigit(byte b) { return '0' <= b && b <= '9'; }
 }

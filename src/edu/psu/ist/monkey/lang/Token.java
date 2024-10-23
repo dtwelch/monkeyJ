@@ -5,7 +5,7 @@ public sealed interface Token {
     static Token fromText(String rawText) {
         return switch (rawText) {
             case "let"  -> Let.LetInst;
-            case "fun"  -> Fun.FunInst;
+            case "fn"  -> Fun.FunInst;
             default     -> new Token.Ident(rawText);
         };
     }
@@ -16,7 +16,7 @@ public sealed interface Token {
             case Eof _     -> "Eof";
             //
             case Ident(var id) -> id;
-            case Int(var i)    -> i + "";
+            case Num(var i)    -> i + "";
             //
             case Assign _ -> "=";
             case Plus _ -> "+";
@@ -30,7 +30,7 @@ public sealed interface Token {
             case LBrace _ -> "{";
             case RBrace _ -> "}";
             //
-            case Fun _ -> "fun";
+            case Fun _ -> "fn";
             case Let _ -> "let";
         };
     }
@@ -40,7 +40,7 @@ public sealed interface Token {
 
     // identifiers + literals
     record Ident(String id) implements Token {}
-    record Int(int i) implements Token {}
+    record Num(String i) implements Token {}
 
     // operators
     enum Assign implements Token {AssignInst}
