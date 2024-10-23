@@ -43,10 +43,29 @@ public final class Lexer {
             case '{' -> Token.LBrace.LBraceInst;
             case '}' -> Token.RBrace.RBraceInst;
             case 0 -> Token.Eof.EofInst;
-            default -> Token.Illegal.IllegalInst;
+            default -> {
+                if (isLetter(ch)) {
+                    var rawId = readIdentifier();
+                    // returns a kw if rawId contains one
+                    yield Token.fromText(rawId);
+                } else {
+                    yield Token.Illegal.IllegalInst;
+                }
+            }
         };
         readChar();
         return tok;
     }
 
+    private String readIdentifier() {
+        var a = this.position;
+        while (isLetter(ch)) {
+            readChar();
+        }
+        return input.substring(a, this.position);
+    }
+
+    private boolean isLetter(byte ch) {
+        return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_';
+    }
 }

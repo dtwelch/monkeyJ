@@ -2,13 +2,21 @@ package edu.psu.ist.monkey.lang;
 
 public sealed interface Token {
 
+    static Token fromText(String rawText) {
+        return switch (rawText) {
+            case "let"  -> Let.LetInst;
+            case "fun"  -> Fun.FunInst;
+            default     -> new Token.Ident(rawText);
+        };
+    }
+
     default String display() {
         return switch (this) {
             case Illegal _ -> "Illegal";
-            case Eof _ -> "Eof";
+            case Eof _     -> "Eof";
             //
             case Ident(var id) -> id;
-            case Int(var i) -> i + "";
+            case Int(var i)    -> i + "";
             //
             case Assign _ -> "=";
             case Plus _ -> "+";
