@@ -56,41 +56,11 @@ public final class LexerTests {
                 let add = fn(x,y) {
                     x + y;
                 };
+                
+                result = add(five, ten)
                 """.trim();
 
-        Token[] expectedTokens = {Token.Let.LetInst, //
-                new Token.Ident("five"), //
-                Token.Assign.AssignInst, //
-                new Token.Num("5"), //
-                Token.Semi.SemiInst, //
-                //
-                Token.Let.LetInst, //
-                new Token.Ident("ten"), //
-                Token.Assign.AssignInst, //
-                new Token.Num("10"), //
-                Token.Semi.SemiInst, //
-                //
-                Token.Let.LetInst, //
-                new Token.Ident("add"), //
-                Token.Assign.AssignInst, //
-                Token.Fun.FunInst, //
-                //
-                Token.LParen.LParenInst, //
-                new Token.Ident("x"), //
-                Token.Comma.CommaInst,//
-                new Token.Ident("y"), //
-                Token.RParen.RParenInst, //
-                //
-                Token.LBrace.LBraceInst, //
-                new Token.Ident("x"), //
-                Token.Plus.PlusInst, //
-                new Token.Ident("y"), //
-                Token.Semi.SemiInst, //
-                Token.RBrace.RBraceInst, //
-                Token.Semi.SemiInst, //
-                //
-                Token.Eof.EofInst //
-        };
+        var expectedTokens = simpleProgExpectedTokens();
         var l = new Lexer(input);
 
         for (Token expectedToken : expectedTokens) {
@@ -112,39 +82,19 @@ public final class LexerTests {
                 5 < 10 > 5;
                 """.strip();
 
-        Token[] expectedTokens = {Token.Let.LetInst, //
-                new Token.Ident("five"), //
-                Token.Assign.AssignInst, //
-                new Token.Num("5"), //
-                Token.Semi.SemiInst, //
-                //
-                Token.Let.LetInst, //
-                new Token.Ident("ten"), //
-                Token.Assign.AssignInst, //
-                new Token.Num("10"), //
-                Token.Semi.SemiInst, //
-                //
-                Token.Let.LetInst, //
-                new Token.Ident("add"), //
-                Token.Assign.AssignInst, //
-                Token.Fun.FunInst, //
-                //
-                Token.LParen.LParenInst, //
-                new Token.Ident("x"), //
-                Token.Comma.CommaInst,//
-                new Token.Ident("y"), //
-                Token.RParen.RParenInst, //
-                //
-                Token.LBrace.LBraceInst, //
-                new Token.Ident("x"), //
-                Token.Plus.PlusInst, //
-                new Token.Ident("y"), //
-                Token.Semi.SemiInst, //
-                Token.RBrace.RBraceInst, //
-                Token.Semi.SemiInst, //
-                //
-                Token.Eof.EofInst //
-        };
+        var expectedTokens = simpleProgExpectedTokens()
+                .appendAll(Vector.of( //
+                        Token.Bang.BangInst,
+                        Token.Minus.MinusInst,
+                        Token.Slash.SlashInst,
+                        Token.Asterisk.AsteriskInst,
+                        new Token.Num("5"),
+                        Token.Semi.SemiInst,
+                        new Token.Num("5"),
+                        Token.Lt.LtInst,
+                        new Token.Num("10"),
+                        Token.Gt.GtInst
+                ));
 
         for (Token expectedToken : expectedTokens) {
             var actualToken = l.nextToken();
@@ -153,8 +103,8 @@ public final class LexerTests {
     }
 
     /**
-     * Returns the expected tokens for the following small monkey
-     * program:
+     * Returns the expected tokens that make up the following small
+     * monkey program:
      * <pre><code>
      * let five = 5
      * let ten = 10;
@@ -201,6 +151,16 @@ public final class LexerTests {
                 Token.Semi.SemiInst, //
                 //
                 // let result = add(five, ten);
+                Token.Let.LetInst, //
+                new Token.Ident("ten"), //
+                Token.Assign.AssignInst, //
+                new Token.Ident("add"), //
+                Token.LParen.LParenInst, //
+                new Token.Ident("five"), //
+                Token.Comma.CommaInst, //
+                new Token.Ident("ten"), //
+                Token.RParen.RParenInst, //
+                Token.Semi.SemiInst, //
                 Token.Eof.EofInst //
         );
     }

@@ -30,6 +30,13 @@ public sealed interface Token {
             case LBrace _ -> "{";
             case RBrace _ -> "}";
             //
+            case Minus _ -> "-";
+            case Bang _ -> "!";
+            case Asterisk _ -> "*";
+            case Slash _ -> "/";
+            case Lt _ -> "<";
+            case Gt _ -> ">";
+            //
             case Fun _ -> "fn";
             case Let _ -> "let";
         };
@@ -45,6 +52,14 @@ public sealed interface Token {
     // operators
     enum Assign implements Token {AssignInst}
     enum Plus implements Token {PlusInst}
+    enum Minus implements Token {MinusInst}
+    enum Bang implements Token {BangInst}
+    enum Asterisk implements Token {AsteriskInst}
+    enum Slash implements Token {SlashInst}
+
+    // relational operators
+    enum Lt implements Token {LtInst}
+    enum Gt implements Token {GtInst}
 
     // delimiters
     enum Comma implements Token {CommaInst}

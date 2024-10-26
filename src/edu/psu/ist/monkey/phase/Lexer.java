@@ -1,8 +1,6 @@
 package edu.psu.ist.monkey.phase;
 
 import edu.psu.ist.monkey.lang.Token;
-import io.vavr.collection.List;
-import io.vavr.collection.Vector;
 
 public final class Lexer {
 
@@ -40,11 +38,17 @@ public final class Lexer {
         Token tok;
         switch (ch) {
             case '=' -> tok = Token.Assign.AssignInst;
+            case '+' -> tok = Token.Plus.PlusInst;
+            case '-' -> tok = Token.Minus.MinusInst;
+            case '!' -> tok = Token.Bang.BangInst;
+            case '/' -> tok = Token.Slash.SlashInst;
+            case '*' -> tok = Token.Asterisk.AsteriskInst;
+            case '<' -> tok = Token.Lt.LtInst;
+            case '>' -> tok = Token.Gt.GtInst;
             case ';' -> tok = Token.Semi.SemiInst;
             case '(' -> tok = Token.LParen.LParenInst;
             case ')' -> tok = Token.RParen.RParenInst;
             case ',' -> tok = Token.Comma.CommaInst;
-            case '+' -> tok = Token.Plus.PlusInst;
             case '{' -> tok = Token.LBrace.LBraceInst;
             case '}' -> tok = Token.RBrace.RBraceInst;
             case 0 -> tok = Token.Eof.EofInst;
