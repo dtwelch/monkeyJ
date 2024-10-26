@@ -57,10 +57,10 @@ public final class LexerTests {
                     x + y;
                 };
                 
-                result = add(five, ten)
+                let result = add(five, ten);
                 """.trim();
 
-        var expectedTokens = simpleProgExpectedTokens();
+        var expectedTokens = simpleProgExpectedTokens().append(Token.Eof.EofInst);
         var l = new Lexer(input);
 
         for (Token expectedToken : expectedTokens) {
@@ -71,48 +71,53 @@ public final class LexerTests {
 
     @Test public void testSimpleProg03() {
         var input = """
-                let five = 5
-                let ten = 10;
-                
-                let add = fn(x, y) {
-                    x + y
-                };
-                let result = add(five, ten);
+                %s
                 !-/*5;
                 5 < 10 > 5;
-                """.strip();
-
-        var expectedTokens = simpleProgExpectedTokens()
-                .appendAll(Vector.of( //
-                        Token.Bang.BangInst,
-                        Token.Minus.MinusInst,
-                        Token.Slash.SlashInst,
-                        Token.Asterisk.AsteriskInst,
-                        new Token.Num("5"),
-                        Token.Semi.SemiInst,
-                        new Token.Num("5"),
-                        Token.Lt.LtInst,
-                        new Token.Num("10"),
-                        Token.Gt.GtInst
-                ));
-
+                """.formatted(sampleProg01).trim();
+        var expectedTokens = simpleProgExpectedTokens().appendAll(Vector.of( //
+                Token.Bang.BangInst, //
+                Token.Minus.MinusInst, //
+                Token.Slash.SlashInst, //
+                Token.Asterisk.AsteriskInst, //
+                new Token.Num("5"), //
+                Token.Semi.SemiInst, //
+                new Token.Num("5"), //
+                Token.Lt.LtInst, //
+                new Token.Num("10"), //
+                Token.Gt.GtInst, //
+                new Token.Num("5"), //
+                Token.Semi.SemiInst, //
+                Token.Eof.EofInst));
+        var l = new Lexer(input);
         for (Token expectedToken : expectedTokens) {
             var actualToken = l.nextToken();
             Assertions.assertEquals(expectedToken, actualToken);
         }
     }
 
+    private static final String sampleProg01 = """
+                let five = 5;
+                let ten = 10;
+            
+                let add = fn(x, y) {
+                    x + y;
+                };
+                let result = add(five, ten);
+            """.trim();
+
     /**
      * Returns the expected tokens that make up the following small
      * monkey program:
      * <pre><code>
-     * let five = 5
+     * let five = 5;
      * let ten = 10;
      * let add = fn(x, y) {
      *      x + y
      * };
      * let result = add(five, ten);
      * </code></pre>
+     * NOTE: callers must manually add the {@link Token.Eof} to the end.
      */
     private Vector<Token> simpleProgExpectedTokens() {
         return Vector.of( //
@@ -141,7 +146,7 @@ public final class LexerTests {
                 new Token.Ident("y"), //
                 Token.RParen.RParenInst, //
                 //
-                // { x + y };
+                // { x + y; };
                 Token.LBrace.LBraceInst, //
                 new Token.Ident("x"), //
                 Token.Plus.PlusInst, //
@@ -152,7 +157,7 @@ public final class LexerTests {
                 //
                 // let result = add(five, ten);
                 Token.Let.LetInst, //
-                new Token.Ident("ten"), //
+                new Token.Ident("result"), //
                 Token.Assign.AssignInst, //
                 new Token.Ident("add"), //
                 Token.LParen.LParenInst, //
@@ -160,8 +165,6 @@ public final class LexerTests {
                 Token.Comma.CommaInst, //
                 new Token.Ident("ten"), //
                 Token.RParen.RParenInst, //
-                Token.Semi.SemiInst, //
-                Token.Eof.EofInst //
-        );
+                Token.Semi.SemiInst);
     }
 }
